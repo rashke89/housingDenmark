@@ -1,0 +1,84 @@
+/* top bar */
+
+.top_bar_gray {
+  color: #aaa;
+  background: #f7f7f7;
+}
+
+.top_bar_red {
+  color: #fff;
+  background: #ae252a;
+}
+
+
+/* navigation bar */
+
+.my_navbar {
+  background: #fff !important;
+}
+
+.navbar-nav>li>.btn {
+  margin: 7px 20px;
+  padding: 5px 20px;
+  border-radius: 17px !important;
+}
+
+.navbar-header img {
+  margin-top: 0.5em !important;
+}
+
+form>.btn-default {
+  border-color: #fff !important;
+}
+
+form>div, button {
+  margin-top: 10px;
+}
+
+.glyphicon {
+  top: 5px !important;
+}
+
+nav>.container-fluid {
+  height: 100px;
+}
+
+.navbar-right {
+  margin-top: 2em !important;
+}
+
+
+/* filters */
+
+.hide_filters {
+  font-size: 0.7em !important;
+  color: gray;
+  cursor: pointer;
+}
+
+.filter_result {
+  font-size: 0.7em;
+  margin-right: 20px;
+  color: gray;
+  cursor: pointer;
+}
+
+#button_active {
+  background: #ae252a;
+  color: #fff;
+}
+
+
+/* sliders */
+
+.rz-bubble {
+  display: none !important;
+}
+
+.rz-pointer {
+  background: #ae252a !important;
+}
+
+.rz-selection {
+  background: #ae252a !important;
+}

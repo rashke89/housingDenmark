@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="housingDenmark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Project</title>
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="./css/main.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- angular slider -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.2.2/rzslider.min.css">
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="./js/app/app.js"></script>
+  <script src="./js/app/services/dbService.js"></script>
+  <!-- angular slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.2.2/rzslider.min.js"></script>
+
+</head>
+
+<body ng-controller="mainCtrl" ng-init="init()">
+
+  <!-- top bar -->
+  <div class="container-fluid">
+    <div class="row top_bar_gray">
+      <div class="col-xs-4 col-md-1 text-center top_bar_red">PREMIUM</div>
+      <div class="col-xs-4 col-md-1 text-center">MARKETPLACE</div>
+      <div class="col-xs-4 col-md-1 text-center">SERVICES</div>
+    </div>
+  </div>
+  <!-- top bar end -->
+
+  <!-- navigation bar -->
+  <nav class="my_navbar navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        <a class="navbar-brand" href="#"><img src="./imgs/brand.png" alt=""></a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <form class="navbar-form navbar-right" role="search">
+          <div ng-if="search" class="form-group">
+            <input type="text" class="form-control" placeholder="Search" ng-model="allHousesSearch">
+          </div>
+          <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" ng-click="searchBox()"></span></button>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Find boliger</a></li>
+          <li><a href="#">Udlej boliger</a></li>
+          <li><a href="#" ng-click="foo()">Hjaelp</a></li>
+          <li><a class="btn btn-default btn-round">Log ind</a></li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+  </nav>
+  <!-- navigation bar end -->
+
+  <!-- main container -->
+  <div class="container">
+
+    <!-- main row -->
+    <div class="row">
+
+      <!-- left row -->
+      <div ng-hide="showme" class="col-md-4">
+        <h3 class="page-header">Filtering<span ng-click="showme=true" class="glyphicon glyphicon-remove-circle pull-right hide_filters"></span></h3>
+
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="location">Søg et sted</label><br>
+              <select class="form-control" name="location" ng-model="house_area" ng-click="catching_results()">
+                <option value=" ">All</option>
+                <option value="Frederiksberg">Frederiksberg, 2000</option>
+                <option value="Slagelse">Slagelse</option>
+                <option value="Charlottenlund">Charlottenlund</option>
+                <option value="Hellerup">Hellerup</option>
+                <option value="Glostrup">Glostrup</option>
+              </select>
+              <hr>
+            </div>
+          </div>
+
+          <!-- slider 1 -->
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="">Huslej <span>Maxpris (DKK)</span></label>
+              <rzslider rz-slider-model="slider1.minValue" rz-slider-high="slider1.maxValue" rz-slider-options="slider1.options"></rzslider>
+              <hr>
+            </div>
+          </div>
+
+          <!-- slider 2 -->
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="">Boligareal <span>m2 (bbr)</span></label>
+              <rzslider rz-slider-model="slider2.minValue" rz-slider-high="slider2.maxValue" rz-slider-options="slider2.options"></rzslider>
+              <hr>
+            </div>
+          </div>
+
+          <!-- boligtype -->
+          <div class="row">
+            <div class="button-group pull-right col-xs-12">
+              <label for="">Boligtype</label><br>
+              <div class="row">
+                <div class="col-xs-6">
+                  <button ng-model="realEstate_type" value="Lejlighed" ng-click="catching_results1('Lejlighed')" class="btn btn-default btn-block" type="button" name="button">Lejlighed</button><br>
+                  <button ng-model="realEstate_type" value="Villalejlighed" ng-click="catching_results1('Villalejlighed')" class="btn btn-default btn-block" type="button" name="button">Villalejlighed</button>
+                </div>
+                <div class="col-xs-6">
+                  <button ng-model="realEstate_type" value="Villa" ng-click="catching_results1('Villa')" class="btn btn-default btn-block " type="button" name="button">Villa</button><br>
+                  <button ng-model="realEstate_type" value="Hotellejlighed" ng-click="catching_results1('Hotellejlighed')" class="btn btn-default btn-block" type="button" name="button">Hotellejlighed</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+
+          <!-- Storrelse -->
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="real_estate_size">Storlese</label>
+              <div class="row">
+                <div class="col-xs-6 form-group">
+                  <select class="form-control" name="bedrooms" ng-model="bedrooms" ng-click="catching_results()">
+                    <option value="">Væerlesr</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5+">5+</option>
+                  </select><br>
+                  <select class="form-control" name="livingrooms" ng-model="livingrooms" ng-click="catching_results()">
+                    <option value="">Stuer</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5+">5+</option>
+                </select>
+                </div>
+                <div class="col-xs-6">
+                  <select class="form-control" name="bathrooms" ng-model="bathrooms" ng-click="catching_results()">
+                    <option value="">Badeværelser</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5+">5+</option>
+                </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+
+          <!-- overtagelsesdato -->
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="cars">Overtagelsesdato</label><br>
+              <select class="form-control" name="cars">
+                <option value="volvo">Vaelg en dato</option>
+            </select>
+
+            </div>
+          </div>
+          <hr>
+
+          <!-- Lejeperiode -->
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="">Lejeperiode</label><br>
+              <div class="row">
+                <div class="col-xs-4">
+                  <button class="btn btn-default btn-block" type="button" name="button">1-12 md.</button>
+                </div>
+                <div class="col-xs-4">
+                  <button class="btn btn-default btn-block" type="button" name="button">1-2 ar</button>
+                </div>
+                <div class="col-xs-4">
+                  <button class="btn btn-default btn-block" type="button" name="button">2+ ar</button>
+                </div>
+              </div>
+              <hr>
+            </div>
+
+          </div>
+
+          <!-- mobleret -->
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="">Mobleret</label><br>
+              <div class="row">
+                <div class="col-xs-8">
+                  <div class="btn-group btn-group-justified">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-default">Ja</button>
+                    </div>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-default">Nej</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
+            </div>
+          </div>
+
+          <!-- husdyr -->
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="">Husdyr Tilladt</label><br>
+              <div class="row">
+                <div class="col-xs-8">
+                  <div class="btn-group btn-group-justified">
+                    <div class="btn-group">
+                      <button id="button_active" type="button" class="btn btn-default button_active">Ja</button>
+                    </div>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-default">Nej</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
+            </div>
+          </div>
+
+          <!-- bopaelspligt -->
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="">Bopaelspligt</label><br>
+              <div class="row">
+                <div class="col-xs-8">
+                  <div class="btn-group btn-group-justified">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-default button_active">Ja</button>
+                    </div>
+                    <div class="btn-group">
+                      <button id="button_active" type="button" class="btn btn-default">Nej</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
+            </div>
+          </div>
+
+          <!-- sog efter sagsnummer -->
+          <div class="row">
+            <div class="col-xs-12">
+              <label for="sog_efter">Sog efter sagsnummer</label><br>
+              <div class="row">
+                <div class="col-xs-8">
+                  <input type="text" class="form-control" id="sog_efter">
+                </div>
+                <div class="col-xs-4">
+                  <button class="btn btn-default btn-block" type="button" name="button">Sog</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- left row end -->
+
+      <!-- right row -->
+      <div class="col-md-8" ng-hide="showme">
+        <!-- Result -->
+        <div class="col-md-12">
+          <h3 class="page-header"><span ng-show="showme" ng-click="showme=false" class="filter_result">Filtering</span>Resultaler <span class="filter_result">{{No}} Results</span></h3>
+          <div class="row">
+            <div style="margin-top:50px" class="col-lg-6 pull-left result_houses" ng-repeat="house in houses | filter: house_area | filter:realEstate_type | filter:{bedrooms:bedrooms} | filter:{living_rooms:livingrooms} | filter:{bathrooms:bathrooms} track by No=$index+1">
+              <img id="houses" class="img img-responsive" ng-src="js/JSON_feed/{{house.featured_image_url}}" alt="">
+              <h4>{{house.localized_title}}</h4>
+              <p class="pull-left">{{house.area.name}}, {{house.area.post_code}}</p><span class="pull-right">No. {{house.case_number}}</span><br>
+              <p class="pull-left text-muted">{{house.localized_short_description | limitTo:100}}</p>
+              <p>{{house.surface_area}}m<sup>2</sup> - {{house.rent_amount}} DKK/md.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-md-12" ng-show="showme">
+        <!-- Result -->
+        <div class="col-md-12">
+          <h3 class="page-header"><span  ng-click="showme=false" class="filter_result">Filtering</span>Resultaler <span class="filter_result">{{No}} Results</span></h3>
+          <div class="row">
+            <div style="margin-top:50px;" class="col-lg-4 pull-left result_houses" ng-repeat="house in houses | filter: house_area | filter:realEstate_type | filter:{bedrooms:bedrooms} | filter:{living_rooms:livingrooms} | filter:{bathrooms:bathrooms} track by No=$index+1">
+              <img id="houses" class="img img-responsive" ng-src="js/JSON_feed/{{house.featured_image_url}}" alt="">
+              <h4>{{house.localized_title}}</h4>
+              <p class="pull-left">{{house.area.name}}, {{house.area.post_code}}</p><span class="pull-right">No. {{house.case_number}}</span><br>
+              <p class="pull-left text-muted">{{house.localized_short_description | limitTo:100}}</p>
+              <p>{{house.surface_area}}m<sup>2</sup> - {{house.rent_amount}} DKK/md.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- main row end -->
+
+  </div>
+  <!-- main container end -->
+
+</body>
+
+</html>
